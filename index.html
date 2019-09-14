@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous"
+  />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="mt-5 ml-5">
+      <input
+        name="searchTxt"
+        type="text"
+        maxlength="512"
+        id="searchTxt"
+        class="searchField"
+      />
+      <button onclick="arraySubmitted()" class="btn btn-info">Submit Array</button>
+      <button onclick="arrayCleared()" class="btn btn-danger">Clear</button>
+
+      <div>
+        <span>Most optimal route: </span><b><span id="optimalRoute"></span></b>
+        <br />
+        <span>Your array is: </span>
+      </div>
+    </div>
+  </body>
+  <script>
+    // MAIN FUNCTION
+    function arraySubmitted() {
+      //Extract the input value
+      var value = document.getElementById("searchTxt").value;
+
+
+      //Convert it to an array
+      var array = eval("[" + value + "]");
+
+      //  Are all indexes numbers?
+      for (i = 0; i < array.length; i++ ) {
+        if (isNaN(array[i])) {
+          alert("All values must be numbers")
+        document.getElementById("searchTxt").value = "";
+        }
+      }
+
+      document.getElementById("optimalRoute").innerHTML = array.toString();
+      console.log("array.toString(): " + array.toString());
+
+      // Initial conditions:
+      //  Is each number value separated by a comma?
+      //  Are all indexes numbers?
+      //  Are all numbers int?
+      //  Does the array start with a value > 0?
+
+      console.log(array);
+    }
+
+    function arrayCleared() {
+      document.getElementById("optimalRoute").innerHTML = "";
+      document.getElementById("searchTxt").value = "";
+    }
+  </script>
+</html>
