@@ -23,7 +23,7 @@
       <button onclick="arraySubmitted()" class="btn btn-info">
         Submit Array
       </button>
-      <button onclick="arrayCleared()" class="btn btn-danger">Clear</button>
+      <button onclick="clearData()" class="btn btn-danger">Clear</button>
 
       <!-- <div>
         <p>Most optimal route: </span><bold></bold><p id="optimalRoute"></p>
@@ -40,22 +40,23 @@
       </thead>
       <tbody>
         <tr>
-          <!-- <th scope="row">Most optimal route:</th> -->
           <td>Most optimal route:</td>
           <td id="optimalRoute"></td>
         </tr>
 
         <tr>
-          <!-- <th scope="row">Your array is:</th> -->
           <td>Your array is:</td>
           <td id="arrayEntered"></td>
         </tr>
 
         <tr>
-          <!-- <th scope="row">New optimal route is:</th> -->
           <td>New optimal route is:</td>
           <td id="optimalRouteDiv"></td>
         </tr>
+        <tr>
+            <td>Is array winnable?</td>
+            <td id="arrayWinnable"></td>
+          </tr>
       </tbody>
     </table>
   </body>
