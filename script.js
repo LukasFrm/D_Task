@@ -24,7 +24,7 @@ function arrayWinnable() {
 
 function arraySubmitted() {
   // Check if array has been previously submitted already
-  if (document.getElementById("arrayEntered").innerHTML != "") {
+  if (document.getElementById("optimalRouteDiv").innerHTML !== "") {
     clearData();
   }
 
@@ -45,13 +45,38 @@ function arraySubmitted() {
     );
     clearData();
   }
-
-  //  Check if all indexes are numbers
+  var negativeArray = false;
+  //  Check if all indexes are numbers and if array is negative
   for (i = 0; i < array.length; i++) {
     if (isNaN(array[i])) {
       alert("All values must be integer numbers");
       clearData();
+    } else if (array[i] <= 0) {
+      negativeArray = true;
+      console.log(`last negativeNumber value is ${negativeArray}`);
+    } else if (array[i] > 0) {
+      negativeArray = false;
+      i = array.length;
     }
+  }
+  // NEGATIVE ARRAY FUNCTIONALITY
+
+  if (negativeArray) {
+    // Convert the array into positive
+    var array = array.map(item => {
+      return (item *= -1);
+    });
+
+    // Reverse the array
+    var array = array.reverse();
+    console.log("Whole array is negative");
+    console.log(`array here should be reversed: ${array}`);
+  }
+
+  function mirrorIndexValue(x) {
+    if (negativeArray) {
+      return array[parseInt(array.length - x)];
+    } else return x;
   }
 
   var newPossibleSteps = new Array();
@@ -59,7 +84,7 @@ function arraySubmitted() {
   var trueArrayValues = new Array();
 
   //Create an array representation with each array number in a span element
-  // most optimal numbers will be marked red
+  // most optimal numbers will be marked green
 
   for (i = 0; i < array.length; i++) {
     var z = document.createElement("span");
@@ -79,10 +104,8 @@ function arraySubmitted() {
     newPossibleSteps[i] = [];
     trueValues[i] = [];
     trueArrayValues[i] = [];
-    // if (newPossibleSteps[i].length == 1) {
-    //   trueValues[i].push(parseInt(newPossibleSteps[i][0]));
-    // }
-    // Loop from index within a range of that index's value
+
+    // Loop from current index + 1, within a range of that index's value
     var endOfSteps = parseInt(array[i] + 1);
     for (var j = 1; j < endOfSteps; j++) {
       var step = array[i + j];
@@ -114,10 +137,32 @@ function arraySubmitted() {
           }
 
           if (trueValues[i].length > 0) {
+            if (negativeArray) {
+              i = array.length - i - 1;
+            } else i;
+            const receivedMirrorIndex = mirrorIndexValue(i);
             var max = Math.max(...trueValues[i]);
             var biggestIndex = trueValues[i].indexOf(max);
-            var calculatedOptimalStep = newPossibleSteps[i][biggestIndex];
-            var highlightValue = trueArrayValues[i][biggestIndex];
+            console.warn(`receivedMirrorIndex is ${receivedMirrorIndex}`);
+            console.warn(`array is ${array}`);
+            console.warn(`array.length is ${array.length}`);
+            console.warn(`array.length - i is ${array.length - i}`);
+            console.warn(`mirrorIndexValue(i) is ${mirrorIndexValue(i)}`);
+            console.warn(`${trueArrayValues}`);
+            console.warn(
+              `trueArrayValues[array.length - i] is ${
+                trueArrayValues[array.length - i]
+              }`
+            );
+
+            // When array is negative, i should be inverted, as in:
+            // i = array.length - i
+            // this belongs somewhere else!
+
+            negativeArray
+              ? (highlightValue =
+                  trueArrayValues[trueArrayValues.length - i][biggestIndex])
+              : (highlightValue = trueArrayValues[i][biggestIndex]);
 
             document
               .getElementsByTagName("span")
@@ -126,28 +171,13 @@ function arraySubmitted() {
         }
       }
     }
-    if (trueArrayValues[i] == "undefined" || trueArrayValues[i].length == 0) {
-      document.getElementsByTagName("span").item(i + 1).style.backgroundColor =
-        "red";
-    }
+    // if (trueArrayValues[i] == "undefined" || trueArrayValues[i].length == 0) {
+    //   document.getElementsByTagName("span").item(i + 1).style.backgroundColor =
+    //     "red";
+    // }
 
     i += biggestIndex;
   }
-
-  // NEGATIVE ARRAY FUNCTIONALITY
-
-  // Get array
-  var a = [-2, -5, -3, -1, -1, -1, -2, -1];
-  // Convert array into positive
-  var b = a.map(item => {
-    return (item *= -1);
-  });
-
-  // Reverse the array
-  var c = b.reverse();
-  
-  console.log(`c is ${c}`);
-  console.log(d);
 
   console.warn(trueValues);
   console.warn(newPossibleSteps);
@@ -155,18 +185,24 @@ function arraySubmitted() {
 
   document.getElementById("arrayEntered").innerHTML = array.toString();
 
-  if (
-    parseInt(trueArrayValues[trueArrayValues.length - 1]) ===
-    array.length - 1
-  ) {
-    console.log("Array is winnable!");
-    arrayWinnable();
+  // Rewrite this condition?
+  for (let z = trueArrayValues.length; z > 0; z--) {
+    if (trueArrayValues[z].length !== "undefined") {
+      if (
+        trueArrayValues[z][trueArrayValues[z].length - 1] ===
+        array.length - 1
+      ) {
+        console.warn(`z is ${z}`);
+        console.log("Array is winnable!");
+        arrayWinnable();
 
-    document.getElementsByTagName("span").item(0).style.backgroundColor =
-      "#8cff66";
-    document
-      .getElementsByTagName("span")
-      .item(array.length - 1).style.backgroundColor = "#8cff66";
-    return;
-  } else arrayUnwinnable();
+        document.getElementsByTagName("span").item(0).style.backgroundColor =
+          "#8cff66";
+        document
+          .getElementsByTagName("span")
+          .item(array.length - 1).style.backgroundColor = "#8cff66";
+        return;
+      }
+    } else arrayUnwinnable();
+  }
 }
